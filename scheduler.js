@@ -125,13 +125,15 @@ function draw() {
     // Plot first reading
     plotAlarm(scheduleObj[0], scheduleObj[1]);
     // Iterate two days worth of readings
-    while (scheduleObj[0] < DaysToShow * 86400) {
+    var iterations = 0;
+    while (scheduleObj[0] < DaysToShow * 86400 && iterations < 200) {
         scheduleObj = nextAlarm(scheduleObj[0], r_int, t_int, ftt, reading_count);
         if (scheduleObj[1] == 0)
             reading_count += 1;
         else
             reading_count = 0;
         plotAlarm(scheduleObj[0], scheduleObj[1]);
+        iterations++;
     }
     firstDraw = false;
 }
@@ -159,7 +161,7 @@ function nextAlarm(time, r_int, t_int, ftt, reading_count) {
     if (nextAlarm < time) {
         nextAlarm += 86400;
     }
-    
+
     var n = int( t_int / r_int );
     if (n != 0)
         nextTransmit |= ((reading_count + 1) % n == 0) ? 1 : 0;
